@@ -30,6 +30,9 @@ osoba osoba_from_cin()
 
 void remove_second_position(std::list<osoba>* list_address)
 {
+    if(list_address == nullptr)
+        return;
+
     if(list_address->size() >= 2)
     {
         osoba first_elem = list_address->front();
@@ -37,6 +40,26 @@ void remove_second_position(std::list<osoba>* list_address)
         list_address->pop_front();
         list_address->push_front(first_elem);
     }
+}
+
+void new_elem_on_second_position(std::list<osoba>* list_address)
+{
+    if(list_address == nullptr)
+        return;
+
+    if(list_address->size() >= 1)
+    {
+        osoba first_elem = list_address->front();
+        list_address->pop_front();
+        osoba new_osoba = osoba_from_cin();
+        list_address->push_front(new_osoba);
+        list_address->push_front(first_elem);
+    }
+}
+
+void delete_list(std::list<osoba>* list_address)
+{
+    list_address->clear();
 }
 
 int main()
@@ -51,6 +74,9 @@ int main()
     print_list(&list);
     
     remove_second_position(&list);
+    new_elem_on_second_position(&list);
     print_list(&list);
 
+    delete_list(&list);
+    print_list(&list);
 }
