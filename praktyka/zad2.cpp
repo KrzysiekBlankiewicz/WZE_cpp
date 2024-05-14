@@ -2,7 +2,6 @@
 #include <limits.h>
 #include <math.h>
 
-
 unsigned long long factorial_inside(int number)
 {
     if(number == 0)
@@ -29,6 +28,7 @@ unsigned long long factorial(int number)
 int main()
 {
     int x;
+    std::cout << "Proszę o podanie liczby" << std::endl;
     std::cin >> x;
     unsigned long long result = factorial(x);
     if(result == 0)
