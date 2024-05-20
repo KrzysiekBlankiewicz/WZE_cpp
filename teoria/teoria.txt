@@ -1,0 +1,43 @@
+1. Jakie są różnice między wskaźnikami a referencjami w C++?
+
+Zarówno wskaźniki jak i referencje są metodami na wskazanie na dany obiekt w pamięci.
+Pozwala to uniknąć kopiowania całego obiektu np. przy przekazywaniu go do funkcji, a także umożliwia operowanie i wprowadzanie zmian bezpośrednio na obiekcie przez każdy fragment kodu posiadający do niego odniesienie.
+
+Wskaźnik jest po prostu adresem, pod jakim znajduje się dany obiekt. Jest więc liczbą zajmującą swoje własne miejsce w pamięci.
+Wskaźnik może również wskazywać na NULL (np. zanim zostanie zdefiniowany), co oznacza, że nie wskazuje na żadne znaczące miejsce pamięci.
+Można na tej liczbie wykonywać operacje, zmieniać ją (aby wskazywała już na inny adres).
+
+Korzystanie ze wskaźników wiąże się z pewnymi zagrożeniami, na które w pewnym zakresie odpowiada mechanizm referencji.
+Referencja również pozwala na odwołanie się do obiektu w pamięci, ale:
+- w przeciwieństwie do wskaźnika nie może być "pusta" (zawsze wskazuje na "valid obiekt").
+- referencja jako adres dzieli miejsce w pamięci z obiektem, na który wskazuje (nie wiem, jak jest to zrealizowane, ale nie zajmuje osobnego adresu)
+- na referencji nie można wykonywać operacji, zmieniać jej wartości (zmieniać obiektu na jaki wskazuje)
+- odwołanie się do obiektu przez referencję nie wymaga dereferencji, jak w przypadku wskaźnika
+
+2. Wyjaśnij, jak działają inteligentne wskaźniki (smart pointers) w C++. Jakie są główne typy 
+inteligentnych wskaźników dostępne w standardzie C++11?
+
+Inteligentne wskaźniki są klasami obudowującymi "goły" wskaźnik w taki sposób, aby ułatwić programiście zarządzanie pamięcią.
+Użycie inteligentnych wskaźników zapewnia automatyczne zwalnianie zaalokowanej pamięci, 
+
+Najpowszechniej używanymi inteligentnymi wskaźnikami są shared_ptr i unique_ptr.
+unique_ptr zapewnia, że na dany obiekt będzie wskazywał jedynie jeden wskaźnik (oczywiście jedynie jeden unique_ptr...).
+Kiedy wskaźnik ten przestanie wskazywać na nasz obiekt, jest on usuwany. Wynika z tego, że unique_ptr nie może być kopiowany.
+Jest natomiast możliwe przekazanie odwołania do obiektu funkcją move() do innego unique_ptr.
+
+shared_ptr pozwala na utrzymywanie w programie wielu odwołań do obiektu. W związku z tym przechowuje informację o ilości odwołań.
+Tak aby zniszczyć obiekt dopiero w momencie, gdy nie jest wskazywany przez żaden shared_ptr.
+
+3. Co to jest dziedziczenie wirtualne i kiedy należy go używać?
+
+W C++ jest dostępne dziedziczenie wielobazowe. Zatem dana klasa może dziedziczyć jednocześnie po kilku innych.
+Jest to bardzo przydatne, ale wiąże się z pewnym zagrożeniem.
+Wystepuje ono w momencie, kiedy klasa (D) dziedziczy po dwóch klasach bazowych (B i C) a obie klasy bazowe dziedziczą po jednej, innej klasie (A).
+(zatem B i C są "rodzicami" D, a A jest "wspólnym dziadkiem" D)
+W takiej sytuacji częściami obiektu klasy D są obiekt klasy B i obiekt klasy C, a w obu tych częściach znajduje się część będąca obiektem klasy A.
+Zatem obiekt klasy D ma w sobie dwa elementy będące klasy A. Może to prowadzić do niejednoznaczności.
+
+Z tego powodu B i C mogą wirtualnie dziedziczyć po A, co oznacza, że ich klasy pochodne będą przechowywać jeden składnik klasy A dzielony pomiędzy ich części składowe będące klas B i C.
+
+Dziedziczenie wirtualne jest stosowane dość rzadko, ponieważ jest bardziej kosztowne niż klasyczne (np. przy konwersji typów przez dynamic_cast).
+Powinno być używane jeżeli w strukturze klas występuje opisana zależność w dziedziczeniu.
